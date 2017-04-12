@@ -7,8 +7,8 @@
     crossorigin="anonymous">
 </head>
 
-<body style="padding:20px;">
-  <% include ./partials/_header %>
+<body style="padding: 20px;">
+
     <table class="pure-table pure-table-bordered">
       <thead>
         <tr>
@@ -29,7 +29,7 @@
         </tr>
       </tbody>
     </table>
-    <form class="pure-form" action="/urls/<%= shorturl %>/update" method="POST" style="margin:150px;">
+    <form class="pure-form" action="/urls/<%= shorturl %>/update" method="POST">
       <label for="longURL">Enter a new URL:</label>
       <input id="longURL" type="text" name="longURL" placeholder="<%= longurl %>" style="width: 300px">
       <input class="pure-button pure-button-primary" type="submit" value="Edit">

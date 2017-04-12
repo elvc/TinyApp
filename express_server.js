@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 8080; // default port 8080
 const bodyParser = require("body-parser");
+const cookieParser = require('cookie-parser');
+app.use(cookieParser())
 app.use(bodyParser.urlencoded({
   extended: true
 }));
@@ -39,6 +41,7 @@ app.get("/urls.json", (req, res) => {
 // list URLs
 app.get("/urls", (req, res) => {
   let templateVars = {
+    username: req.cookies["username"],
     urls: urlDB
   };
   res.render("urls_index", templateVars);
@@ -47,6 +50,7 @@ app.get("/urls", (req, res) => {
 // create entry for new URL
 app.post("/urls", (req, res) => {
   let templateVars = {
+    username: req.cookies["username"],
     urls: urlDB
   };
   let rand = generateRandomString();
@@ -56,7 +60,10 @@ app.post("/urls", (req, res) => {
 
 // add new URL
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
+    let templateVars = {
+    username: req.cookies["username"],
+  };
+  res.render("urls_new", templateVars);
 });
 
 // list short URL and its full URL 
@@ -64,6 +71,7 @@ app.get("/urls/:shortUrl", (req, res) => {
   let sUrl = req.params.shortUrl;
   if (urlDB[sUrl]) {
     let templateVars = {
+      username: req.cookies["username"],
       shorturl: sUrl,
       longurl: urlDB[sUrl]
     };
@@ -83,10 +91,25 @@ app.get("/u/:shortUrl", (req, res) => {
   }
 });
 
+// user login
+app.post("/login", (req, res) => {
+  // console.log(req.body.username);
+  res.cookie('username', req.body.username);
+  res.redirect('/');
+});
+
+// user logout
+app.post("/logout", (req, res) => {
+  // console.log(req.body.username);
+  res.clearCookie('username');
+  res.redirect('/');
+});
+
 // delete URL
 app.post("/urls/:shortUrl/delete", (req, res) => {
   delete urlDB[req.params.shortUrl];
   let templateVars = {
+    username: req.cookies["username"],
     urls: urlDB
   };
   res.render("urls_index", templateVars);
@@ -99,6 +122,7 @@ app.post("/urls/:shortUrl/update", (req, res) => {
 
   // redirect to index page after update
   let templateVars = {
+    username: req.cookies["username"],
     urls: urlDB
   };
   res.render("urls_index", templateVars);
