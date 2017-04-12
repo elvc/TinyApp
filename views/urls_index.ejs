@@ -3,18 +3,35 @@
 
 <head>
   <title>TinyApp</title>
+  <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/pure-min.css" integrity="sha384-UQiGfs9ICog+LwheBSRCt1o5cbyKIHbwjWscjemyBMT9YCUMZffs6UqUTd0hObXD"
+    crossorigin="anonymous">
 </head>
 
-<body>
+<body style="padding:20px;">
   <% include ./partials/_header %>
+    <table class="pure-table pure-table-bordered">
+      <thead>
+        <tr>
+          <th>Full URL</th>
+          <th>Shortened URL</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for (let url in urls) { %>
+          <tr>
+            <td>
+              <%= urls[url] %>
+            </td>
+            <td>
+              <a href='/u/<%= url %>'>
+                <%= url %>
+              </a>
+            </td>
+          </tr>
+          <% } %>
+      </tbody>
+    </table>
 
-  <% for (let url in urls) { %>
-    <li>
-      <strong>Full URL</strong>: <%= urls[url] %> <strong>Shortened to:</strong> <a href='/u/<%= url %>'><%= url %></a>
-    </li>
-  <% } %>
-    <li><a href='/urls/new'>Click here to shorten URL</a></li>
-    <% %>
 </body>
 
 </html>

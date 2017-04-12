@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head></head>
-  <body style="font-size:20px; padding:50px;">
+  <head>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/pure-min.css" integrity="sha384-UQiGfs9ICog+LwheBSRCt1o5cbyKIHbwjWscjemyBMT9YCUMZffs6UqUTd0hObXD" crossorigin="anonymous">
+  </head>
+  <body style="padding:20px;">
     <% include partials/_header %>
 
-    <form action="/urls" method="POST" style="margin:150px;">
+    <form class="pure-form" action="/urls" method="POST" style="margin:150px;">
       <label for="longURL">Enter a URL:</label>
       <input id="longURL" type="text" name="longURL" placeholder="http://" style="width: 300px">
-      <input type="submit" value="Submit">
+      <input class="pure-button pure-button-primary" type="submit" value="Submit">
     </form>
+
   </body>
 </html>
