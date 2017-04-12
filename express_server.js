@@ -43,14 +43,19 @@ app.get("/urls/new", (req, res) => {
 
 app.get("/urls/:shortUrl", (req, res) => { //:shortUrl is a param middleware
   let templateVars = {
-    urls: res.locals.longURL
+    shorturl: res.locals.shortURL,
+    longurl: res.locals.longURL
   };
   res.render("urls_show", templateVars);
 });
 
 // redirect to long URL
 app.get("/u/:shortUrl", (req, res) => {
+  if(res.locals.longURL !== undefined){
   res.redirect(res.locals.longURL);
+  } else {
+    res.send("Page Not Found. Short URL not found on database. ");
+  }
 });
 
 app.get("/urls", (req, res) => {
@@ -62,9 +67,12 @@ app.get("/urls", (req, res) => {
 
 // post method
 app.post("/urls", (req, res) => {
+  let templateVars = {
+    urls: urlDatabase
+  };
   let rand = generateRandomString();
   urlDatabase[rand] = req.body.longURL; 
-  res.send(rand); 
+  res.render("urls_index", templateVars); 
 });
 
 app.get("/hello", (req, res) => {
