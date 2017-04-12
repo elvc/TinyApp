@@ -12,23 +12,31 @@
     <table class="pure-table pure-table-bordered">
       <thead>
         <tr>
-          <th>Full URL</th>
           <th>Shortened URL</th>
+          <th>Full URL</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>
-            <%= longurl %>
-          </td>
-          <td>
             <a href='/u/<%= shorturl %>'>
               <%= shorturl %>
             </a>
           </td>
+          <td>
+            <%= longurl %>
+          </td>
         </tr>
       </tbody>
     </table>
+    <form class="pure-form" action="/urls/<%= shorturl %>/update" method="POST" style="margin:150px;">
+      <label for="longURL">Enter a new URL:</label>
+      <input id="longURL" type="text" name="longURL" placeholder="<%= longurl %>" style="width: 300px">
+      <input class="pure-button pure-button-primary" type="submit" value="Edit">
+    </form>
 </body>
-
 </html>
+
+
+
+    

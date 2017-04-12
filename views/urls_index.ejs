@@ -14,6 +14,7 @@
         <tr>
           <th>Full URL</th>
           <th>Shortened URL</th>
+          <th>Edit URL</th>
           <th>Delete URL</th>
         </tr>
       </thead>
@@ -29,8 +30,13 @@
               </a>
             </td>
             <td>
+              <form class="pure-form" method="GET" action="/urls/<%= url %>">
+                <input class="pure-button" type="submit" value="Edit">
+              </form>
+            </td>
+            <td>
               <form class="pure-form" method="POST" action="/urls/<%= url %>/delete">
-                <input class="pure-button" type="submit" name='delete' value="Delete">
+                <input class="pure-button" type="submit" value="Delete">
               </form>
             </td>
           </tr>

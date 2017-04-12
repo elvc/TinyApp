@@ -18,7 +18,8 @@ function generateRandomString() {
   return string;
 }
 
-let urlDatabase = {
+// URL Database
+let urlDB = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
@@ -27,68 +28,82 @@ app.get("/", (req, res) => {
   res.end("Hello!");
 });
 
-app.get("/urls.json", (req, res) => {
-  res.json(urlDatabase);
+app.get("/hello", (req, res) => {
+  res.end("<html><body>Hello <b>World</b></body></html>\n");
 });
 
+app.get("/urls.json", (req, res) => {
+  res.json(urlDB);
+});
+
+// list URLs
+app.get("/urls", (req, res) => {
+  let templateVars = {
+    urls: urlDB
+  };
+  res.render("urls_index", templateVars);
+});
+
+// create entry for new URL
+app.post("/urls", (req, res) => {
+  let templateVars = {
+    urls: urlDB
+  };
+  let rand = generateRandomString();
+  urlDB[rand] = req.body.longURL;
+  res.render("urls_index", templateVars);
+});
+
+// add new URL
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
 
-app.get("/urls/:shortUrl", (req, res) => { 
-  if (urlDatabase[req.params.shortUrl]){
+// list short URL and its full URL 
+app.get("/urls/:shortUrl", (req, res) => {
+  let sUrl = req.params.shortUrl;
+  if (urlDB[sUrl]) {
     let templateVars = {
-      shorturl: req.params.shortUrl,
-      longurl: urlDatabase[req.params.shortUrl]
+      shorturl: sUrl,
+      longurl: urlDB[sUrl]
     };
-    res.render("urls_show", templateVars);
-  } else {
-    res.send("Page Not Found. Shortened URL not found on database. ");
+  res.render("urls_show", templateVars);
+} else {
+    res.end("Page Not Found. Shortened URL not found on database.");
   }
 });
 
 // redirect to long URL
 app.get("/u/:shortUrl", (req, res) => {
   let sUrl = req.params.shortUrl;
-  if(urlDatabase[sUrl]){
-  res.redirect(urlDatabase[sUrl]);
+  if (urlDB[sUrl]) {
+    res.redirect(urlDB[sUrl]);
   } else {
-    res.send("Page Not Found. Shortened URL not found on database. ");
+    res.end("Page Not Found. Shortened URL not found on database.");
   }
 });
 
-app.get("/urls", (req, res) => {
+// delete URL
+app.post("/urls/:shortUrl/delete", (req, res) => {
+  delete urlDB[req.params.shortUrl];
   let templateVars = {
-    urls: urlDatabase
+    urls: urlDB
   };
   res.render("urls_index", templateVars);
 });
 
-// post method
-app.post("/urls", (req, res) => {
-  let templateVars = {
-    urls: urlDatabase
-  };
-  let rand = generateRandomString();
-  urlDatabase[rand] = req.body.longURL; 
-  res.render("urls_index", templateVars); 
-});
+// update URL
+app.post("/urls/:shortUrl/update", (req, res) => {
+  let sUrl = req.params.shortUrl;
+  urlDB[sUrl] = req.body.longURL;
 
-// delete
-app.post("/urls/:shortUrl/delete", (req, res) => {
-  delete urlDatabase[req.params.shortUrl];
+  // redirect to index page after update
   let templateVars = {
-    urls: urlDatabase
+    urls: urlDB
   };
-  res.render("urls_index", templateVars); 
-});
-
-app.get("/hello", (req, res) => {
-  res.end("<html><body>Hello <b>World</b></body></html>\n");
+  res.render("urls_index", templateVars);
 });
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
-
-
