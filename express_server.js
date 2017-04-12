@@ -67,9 +67,9 @@ app.get("/urls/:shortUrl", (req, res) => {
       shorturl: sUrl,
       longurl: urlDB[sUrl]
     };
-  res.render("urls_show", templateVars);
-} else {
-    res.end("Page Not Found. Shortened URL not found on database.");
+    res.render("urls_show", templateVars);
+  } else {
+    res.status(404).send('ShortURL Not Found. Please double check');
   }
 });
 
@@ -79,7 +79,7 @@ app.get("/u/:shortUrl", (req, res) => {
   if (urlDB[sUrl]) {
     res.redirect(urlDB[sUrl]);
   } else {
-    res.end("Page Not Found. Shortened URL not found on database.");
+    res.status(404).send('Short URL Not Found. Unable to redirect. Please double check');
   }
 });
 
@@ -103,6 +103,11 @@ app.post("/urls/:shortUrl/update", (req, res) => {
   };
   res.render("urls_index", templateVars);
 });
+
+app.get('*', function (req, res, next) {
+  res.status(404).send('Page Not Found');
+});
+
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
