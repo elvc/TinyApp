@@ -23,12 +23,6 @@ let urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
-app.param('shortUrl', (req, res, next, shortUrl) => {
-  res.locals.shortURL = shortUrl;
-  res.locals.longURL = urlDatabase[shortUrl];
-  next();
-});
-
 app.get("/", (req, res) => {
   res.end("Hello!");
 });
@@ -41,20 +35,25 @@ app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
 
-app.get("/urls/:shortUrl", (req, res) => { //:shortUrl is a param middleware
-  let templateVars = {
-    shorturl: res.locals.shortURL,
-    longurl: res.locals.longURL
-  };
-  res.render("urls_show", templateVars);
+app.get("/urls/:shortUrl", (req, res) => { 
+  if (urlDatabase[req.params.shortUrl]){
+    let templateVars = {
+      shorturl: req.params.shortUrl,
+      longurl: urlDatabase[req.params.shortUrl]
+    };
+    res.render("urls_show", templateVars);
+  } else {
+    res.send("Page Not Found. Shortened URL not found on database. ");
+  }
 });
 
 // redirect to long URL
 app.get("/u/:shortUrl", (req, res) => {
-  if(res.locals.longURL !== undefined){
-  res.redirect(res.locals.longURL);
+  let sUrl = req.params.shortUrl;
+  if(urlDatabase[sUrl]){
+  res.redirect(urlDatabase[sUrl]);
   } else {
-    res.send("Page Not Found. Short URL not found on database. ");
+    res.send("Page Not Found. Shortened URL not found on database. ");
   }
 });
 

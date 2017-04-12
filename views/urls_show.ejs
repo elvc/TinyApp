@@ -3,14 +3,32 @@
 
 <head>
   <title>TinyApp</title>
-  <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/pure-min.css" integrity="sha384-UQiGfs9ICog+LwheBSRCt1o5cbyKIHbwjWscjemyBMT9YCUMZffs6UqUTd0hObXD" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/pure-min.css" integrity="sha384-UQiGfs9ICog+LwheBSRCt1o5cbyKIHbwjWscjemyBMT9YCUMZffs6UqUTd0hObXD"
+    crossorigin="anonymous">
 </head>
 
 <body style="padding:20px;">
   <% include ./partials/_header %>
-
-    <%= longurl %> <br>Shortened URL: <a href='/u/<%= shorturl %>'><%= shorturl %></a>
-
+    <table class="pure-table pure-table-bordered">
+      <thead>
+        <tr>
+          <th>Full URL</th>
+          <th>Shortened URL</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <%= longurl %>
+          </td>
+          <td>
+            <a href='/u/<%= shorturl %>'>
+              <%= shorturl %>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 </body>
 
 </html>
