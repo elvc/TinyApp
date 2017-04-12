@@ -9,13 +9,25 @@ app.use(bodyParser.urlencoded({
 app.set("view engine", "ejs");
 
 function generateRandomString() {
+  let string = "";
+  const CHAR_SET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
+  for (let i = 0; i < 6; i++)
+    string += CHAR_SET.charAt(Math.floor(Math.random() * CHAR_SET.length));
+
+  return string;
 }
 
-const urlDatabase = {
+let urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
+
+app.param('shortUrl', (req, res, next, shortUrl) => {
+  res.locals.shortURL = shortUrl;
+  res.locals.longURL = urlDatabase[shortUrl];
+  next();
+});
 
 app.get("/", (req, res) => {
   res.end("Hello!");
@@ -29,11 +41,16 @@ app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
 
-app.get("/urls/:id", (req, res) => {
+app.get("/urls/:shortUrl", (req, res) => { //:shortUrl is a param middleware
   let templateVars = {
-    shortURL: req.params.id
+    urls: res.locals.longURL
   };
   res.render("urls_show", templateVars);
+});
+
+// redirect to long URL
+app.get("/u/:shortUrl", (req, res) => {
+  res.redirect(res.locals.longURL);
 });
 
 app.get("/urls", (req, res) => {
@@ -45,8 +62,9 @@ app.get("/urls", (req, res) => {
 
 // post method
 app.post("/urls", (req, res) => {
-  console.log(req.body); // debug statement to see POST parameters
-  res.send("Ok"); // Respond with 'Ok' (we will replace this)
+  let rand = generateRandomString();
+  urlDatabase[rand] = req.body.longURL; 
+  res.send(rand); 
 });
 
 app.get("/hello", (req, res) => {
@@ -57,12 +75,4 @@ app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
 
-function generateRandomString() {
-  let string = "";
-  const CHAR_SET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-  for (let i = 0; i < 6; i++)
-    string += CHAR_SET.charAt(Math.floor(Math.random() * CHAR_SET.length));
-
-  return string;
-}

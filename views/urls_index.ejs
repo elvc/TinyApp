@@ -10,10 +10,10 @@
 
   <% for (let url in urls) { %>
     <li>
-      <strong>Full URL</strong>: <%= urls[url] %> now shortened to: <a href='#'><%= url %></a>
+      <strong>Full URL</strong>: <%= urls[url] %> <strong>Shortened to:</strong> <a href='/u/<%= url %>'><%= url %></a>
     </li>
   <% } %>
-    <li><a href='#'>Shorten URL</a></li>
+    <li><a href='/urls/new'>Click here to shorten URL</a></li>
     <% %>
 </body>
 
