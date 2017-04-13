@@ -5,12 +5,16 @@
   </head>
   <body style="padding:20px;">
     <% include partials/_header %> 
-
+    <% if (userid) { %>
     <form class="pure-form" action="/urls" method="POST">
       <label for="longURL">URL to convert:</label>
       <input id="longURL" type="url" name="longURL" placeholder="http://" style="width: 300px">
       <input class="pure-button pure-button-primary" type="submit" value="Convert">
     </form>
-
+    <% } else { %>
+    <hr>
+    <h2>Error 401</h2> 
+    <h3>Tiny App account required. Please register/login above first to shorten a URL</h3>
+    <% } %>
   </body>
 </html>

@@ -34,8 +34,14 @@ const users = {
 
 // URL Database
 const urlDB = {
-  'b2xVn2': 'http://www.lighthouselabs.ca',
-  '9sm5xK': 'http://www.google.com'
+  'b2xVn2': {
+    userID: 'xuD83h',
+    longURL: 'http://www.lighthouselabs.ca'
+  },
+  '9sm5xK': {
+    userID: '0Se7Gs',
+    longURL: 'http://www.google.com'
+  }
 };
 
 // HOME
@@ -250,12 +256,27 @@ app.post('/urls', (req, res) => {
   res.render('urls_index', templateVars);
 });
 
-// add new URL
+// Conver URL
+// if user is not logged in:
+//    returns a 401 response, HTML with:
+//    error message
+//    a link to /login
+// if user is logged in:
+//    returns a 200 response, HTML with:
+//    the site header (see below)
+//    a form, which contains:
+//    text input field for the original URL
+//    submit button -> POST /urls
 app.get('/urls/new', (req, res) => {
-  res.render('urls_new', {
-    usersDB: users,
-    userid: req.cookies['user_id']
-  });
+  if(req.cookies['user_id']) {
+    res.status(200);
+    res.render('urls_new', {
+      usersDB: users,
+      userid: req.cookies['user_id']
+    });
+  } else {
+    res.status(401);
+  }
 });
 
 // list short URL and its full URL 
@@ -265,7 +286,8 @@ app.get('/urls/:shortUrl', (req, res) => {
     let templateVars = {
       usersDB: users,
       shorturl: sUrl,
-      longurl: urlDB[sUrl],
+      // longurl: urlDB[sUrl],
+      urls: urlDB,
       userid: req.cookies['user_id']
     };
     res.render('urls_show', templateVars);
@@ -283,7 +305,7 @@ app.get('/urls/:shortUrl', (req, res) => {
 app.get('/u/:shortUrl', (req, res) => {
   let sUrl = req.params.shortUrl;
   if (urlDB[sUrl]) {
-    res.redirect(urlDB[sUrl]);
+    res.redirect(urlDB[sUrl].longURL);
   } else {
     let templateVars = {
       errCode: 404,
@@ -308,7 +330,7 @@ app.post('/urls/:shortUrl/delete', (req, res) => {
 // update URL
 app.post('/urls/:shortUrl/update', (req, res) => {
   let sUrl = req.params.shortUrl;
-  urlDB[sUrl] = req.body.longURL;
+  urlDB[sUrl].longURL = req.body.longURL;
 
   // redirect to index page after update
   let templateVars = {

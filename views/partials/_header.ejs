@@ -3,10 +3,13 @@
 </header>
 
 <div style="margin-bottom: 20px;">
-  <form method="GET" action="/register" style="display: inline-block;">
-    <input class="pure-button pure-button-primary" type="submit" value="Register">
-  </form>
+    <form method="GET" action="/" style="display: inline-block;">
+    <input class="pure-button pure-button-primary" type="submit" value="Home">
+    </form>
   <% if (!userid) { %>
+    <form method="GET" action="/register" style="display: inline-block;">
+      <input class="pure-button pure-button-primary" type="submit" value="Register">
+    </form>
     <form method="GET" action="/login" style="display: inline-block;">
       <input class="pure-button pure-button-primary" type="submit" value="Log In">
     </form>

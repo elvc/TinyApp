@@ -26,14 +26,14 @@
             </a>
           </td>
           <td>
-            <%= longurl %>
+            <%= urls[shorturl].longURL %>
           </td>
         </tr>
       </tbody>
     </table>
     <form class="pure-form" action="/urls/<%= shorturl %>/update" method="POST" style="margin-top: 20px;">
       <label for="longURL">Edit full URL:</label>
-      <input id="longURL" type="text" name="longURL" placeholder="<%= longurl %>" style="width: 300px">
+      <input id="longURL" type="text" name="longURL" placeholder="<%= urls[shorturl].longURL %>" style="width: 300px">
       <input class="pure-button pure-button-primary" type="submit" value="Edit">
     </form>
 </body>
