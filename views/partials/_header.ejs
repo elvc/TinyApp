@@ -3,18 +3,16 @@
 </header>
 
 <div style="margin-bottom: 20px;">
-
-  <% if(username){ %>
-  <div>
-    User logged in as: <strong><%= username %></strong>
-    <form class="pure-form" action="/logout" method="POST" style="padding: 20px 0;">
-      <input class="pure-button pure-button-primary" type="submit" value="Logout">
+  <form method="GET" action="/register" style="display: inline-block;">
+    <input class="pure-button pure-button-primary" type="submit" value="Register">
+  </form>
+  <% if (!userid) { %>
+    <form method="GET" action="/login" style="display: inline-block;">
+      <input class="pure-button pure-button-primary" type="submit" value="Log In">
     </form>
-  <% } else{ %>  
-    <form class="pure-form" action="/login" method="POST" style="margin: 20px 0;">
-      <input id="name" type="text" name="username" placeholder="User name" style="width: 200px">
-      <input class="pure-button pure-button-primary" type="submit" value="Login">
+    <% } else { %>
+    <form method="POST" action="/logout" style="display: inline-block;">
+      <input class="pure-button pure-button-primary" type="submit" value="Log Out">
     </form>
   <% } %>
-
 </div>

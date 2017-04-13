@@ -9,6 +9,7 @@
 
 <body style="padding:20px;">
   <% include ./partials/_header %> 
+
     <table class="pure-table pure-table-bordered">
       <thead>
         <tr>
@@ -26,7 +27,7 @@
             </td>
             <td>
               <a href='/u/<%= url %>'>
-                <%= url %>
+                http://t.iny.io/u/<%= url %>
               </a>
             </td>
             <td>
@@ -43,6 +44,7 @@
           <% } %>
       </tbody>
     </table>
+      <div style="margin: 20px 0;"><a href="/urls/new"><button class="pure-button pure-button-primary">Click here</button></a> if you want to shorten a URL</div>
 </body>
 
 </html>
