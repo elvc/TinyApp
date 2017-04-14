@@ -14,8 +14,8 @@ app.use(cookieSession({
   keys: ['kies']
 }));
 
-const userpw = bcrypt.hashSync('purplemonkey', 10);
-const user2pw = bcrypt.hashSync('funkisgood', 10);
+const userpw = bcrypt.hashSync('purple', 10);
+const user2pw = bcrypt.hashSync('funky', 10);
 
 app.set('view engine', 'ejs');
 
@@ -24,7 +24,6 @@ function urlsForUser(uid) {
 
   for (let url in urlDB) {
     let shorturl = urlDB[url].shortURL;
-    // console.log("shorturl in for in", shorturl);
     if (urlDB[url].userID === uid)
       filtered[shorturl] = urlDB[url];
   }
@@ -177,7 +176,8 @@ app.post('/login', (req, res) => {
   for (let id in users) {
     // if email & pw matches user database, set cookies and redirect to '/'
     if (users[id].email === emailInput && bcrypt.compareSync(password, users[id].password)) {
-      res.cookie('user_id', id);
+      // res.cookie('user_id', id);
+      req.session.user_id = id;
       res.redirect('/');
       return;
     }
@@ -194,7 +194,7 @@ app.post('/login', (req, res) => {
 
 // user logout
 app.post('/logout', (req, res) => {
-  res.clearCookie('req.session.user_id');
+  req.session = null;
   res.redirect('/');
 });
 
@@ -243,6 +243,15 @@ app.get('/urls', (req, res) => {
   }
 });
 
+function checkHTTPprefix (url){
+  var myRe = /d(b+)d/g;
+var myArray = myRe.exec('cdbbdbsbz');
+
+  const exp = /https?:\/\//;
+  if (!exp.exec(url)) {
+      return url += 'http://'+url;
+  }
+}
 // create entry for new URL
 // if user is logged in:
 //    generates a shortURL, saves the link and associates it with the user
@@ -263,9 +272,8 @@ app.post('/urls', (req, res) => {
   let templateVars = {
     usersDB: users,
     urls: filteredDB,
-    userid: uid
+    userid: req.session.user_id
   };
-  console.log('filetered', filteredDB);
   res.render('urls_index', templateVars);
 });
 
