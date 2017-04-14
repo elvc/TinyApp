@@ -8,12 +8,12 @@
 </head>
 
 <body style="padding:20px;">
-  <% include ./partials/_header %> 
+  <% include ./partials/_header %>
     <table class="pure-table pure-table-bordered">
       <thead>
         <tr>
+          <th>Short URL</th>
           <th>Full URL</th>
-          <th>Shortened URL</th>
           <th>Edit URL</th>
           <th>Delete URL</th>
         </tr>
@@ -22,13 +22,9 @@
         <% for (let url in urls) { %>
           <tr>
             <td>
-              <%= urls[url] %>
+              <a href='/u/<%= urls[url].shortURL %>'>http://t.iny.io/u/<%= urls[url].shortURL %></a>
             </td>
-            <td>
-              <a href='/u/<%= url %>'>
-                <%= url %>
-              </a>
-            </td>
+            <td><%= urls[url].longURL %></td>
             <td>
               <form class="pure-form" method="GET" action="/urls/<%= url %>">
                 <input class="pure-button" type="submit" value="Edit">
@@ -40,9 +36,11 @@
               </form>
             </td>
           </tr>
-          <% } %>
+        <% } %>
       </tbody>
     </table>
+  <div style="margin: 20px 0;"><a href="/urls/new"><button class="pure-button pure-button-primary">Click here</button></a> if you want to shorten a
+      URL</div>
 </body>
 
 </html>

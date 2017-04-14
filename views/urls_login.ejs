@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>TinyApp</title>
+  <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/pure-min.css" integrity="sha384-UQiGfs9ICog+LwheBSRCt1o5cbyKIHbwjWscjemyBMT9YCUMZffs6UqUTd0hObXD"
+    crossorigin="anonymous">
+</head>
+
+<body style="padding:20px;">
+  <% include ./partials/_header %>
+
+  <% if (!userid) { %>
+    <h3>Login Form:</h3>
+    <form class="pure-form pure-form-aligned" action="/login" method="POST" style="margin: 20px 0;">
+      <fieldset>
+        <div class="pure-control-group">
+          <label for="email">Email:</label>
+          <input id="email" type="email" name="email" placeholder="example@email.com" style="width: 200px">
+        </div>
+        <br>
+        <div class="pure-control-group">
+          <label for="password">Password:</label>
+          <input id="password" type="password" name="password" placeholder="Password" style="width: 200px">
+          <input class="pure-button pure-button-primary" type="submit" value="Log In">
+        </div>
+      </fieldset>
+    </form>
+  <% } %>
+</body>
+
+</html>
