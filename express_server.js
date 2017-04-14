@@ -3,23 +3,27 @@ const app = express();
 const PORT = process.env.PORT || 8080; // default port 8080
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-app.use(cookieParser())
+const bcrypt = require('bcrypt');
+
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
 
+const userpw = bcrypt.hashSync('purplemonkey', 10);
+const user2pw = bcrypt.hashSync('funkisgood', 10);
+
 app.set('view engine', 'ejs');
 
 function urlsForUser(uid) {
-
   let filtered = {};
+
   for (let url in urlDB) {
     let shorturl = urlDB[url].shortURL;
     // console.log("shorturl in for in", shorturl);
     if (urlDB[url].userID === uid)
       filtered[shorturl] = urlDB[url];
   }
-  console.log("filtered", filtered);
   return filtered;
 }
 
@@ -36,12 +40,12 @@ const users = {
   'xuD83h': {
     id: 'xuD83h',
     email: 'user@example.com',
-    password: 'purple-monkey-dinosaur'
+    password: userpw
   },
   '0Se7Gs': {
     id: '0Se7Gs',
     email: 'user2@example.com',
-    password: 'dishwasher-funk'
+    password: user2pw
   }
 }
 
@@ -110,17 +114,17 @@ app.post('/register', (req, res) => {
     // all is well => Create a new user record
     const cookiesID = generateRandomString();
     const useremail = req.body.email;
-    const userpw = req.body.password;
+    const userpw = bcrypt.hashSync(req.body.password, 10);
 
     users[cookiesID] = {
       id: cookiesID,
       email: req.body.email,
-      // TODO: encrypt with bcrypt
-      password: req.body.password
+      password: userpw
     }
+    console.log('users[cookiesID].password', users[cookiesID].password);
     res.cookie('user_id', cookiesID);
-    res.cookie('email', req.body.email);
-    res.cookie('password', req.body.password);
+    // res.cookie('email', req.body.email);
+    // res.cookie('password', req.body.password);
     res.redirect('/');
   }
 });
@@ -163,35 +167,14 @@ app.get('/login', (req, res) => {
   }
 });
 
-/*
-// find user
-var username = req.body.username
-var password = req.body.password;
-var user = users.find(function(user){
-  return user.username === username;
-});
-
-if (user.password === password){
-  res.cookie('user', user.id);
-} else {
-  res.redirect('/login');
-}
-*/
-
-// if email & password params match an existing user:
-//    sets a cookie
-//    redirect -> /
-// if they don't match:
-//    returns a 401 response, HTML with a relevant error message
-
 app.post('/login', (req, res) => {
 
   const emailInput = req.body.email;
-  const pwInput = req.body.password;
+  const password = req.body.password;
 
   for (let id in users) {
     // if email & pw matches user database, set cookies and redirect to '/'
-    if (users[id].email === emailInput && users[id].password === pwInput) {
+    if (users[id].email === emailInput && bcrypt.compareSync(password, users[id].password)) {
       res.cookie('user_id', id);
       res.redirect('/');
       return;
@@ -210,8 +193,8 @@ app.post('/login', (req, res) => {
 // user logout
 app.post('/logout', (req, res) => {
   res.clearCookie('user_id');
-  res.clearCookie('password');
-  res.clearCookie('email');
+  // res.clearCookie('password');
+  // res.clearCookie('email');
   res.redirect('/');
 });
 
@@ -353,7 +336,7 @@ app.get('/u/:shortUrl', (req, res) => {
 // delete URL
 app.post('/urls/:shortUrl/delete', (req, res) => {
   let uid = req.cookies['user_id'];
-  
+
   delete urlDB[req.params.shortUrl];
 
   const filteredDB = urlsForUser(uid);
