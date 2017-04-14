@@ -10,6 +10,19 @@ app.use(bodyParser.urlencoded({
 
 app.set('view engine', 'ejs');
 
+function urlsForUser(uid) {
+
+  let filtered = {};
+  for (let url in urlDB) {
+    let shorturl = urlDB[url].shortURL;
+    // console.log("shorturl in for in", shorturl);
+    if (urlDB[url].userID === uid)
+      filtered[shorturl] = urlDB[url];
+  }
+  console.log("filtered", filtered);
+  return filtered;
+}
+
 function generateRandomString() {
   let string = '';
   const CHAR_SET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -36,10 +49,12 @@ const users = {
 const urlDB = {
   'b2xVn2': {
     userID: 'xuD83h',
+    shortURL: 'b2xVn2',
     longURL: 'http://www.lighthouselabs.ca'
   },
   '9sm5xK': {
     userID: '0Se7Gs',
+    shortURL: '9sm5xK',
     longURL: 'http://www.google.com'
   }
 };
@@ -123,7 +138,9 @@ app.get('/register', (req, res) => {
     res.redirect('/');
   } else {
     res.status(200);
-    res.render('urls_reg', {userid: null});
+    res.render('urls_reg', {
+      userid: null
+    });
   }
 });
 
@@ -222,13 +239,18 @@ app.get('/urls.json', (req, res) => {
 //      number of unique visits (stretch)
 //    a link to "Create a New Short Link" -> /urls/new
 app.get('/urls', (req, res) => {
+  let uid = req.cookies['user_id'];
   // if user is logged in
   if (req.cookies['user_id']) {
+    // filter only user
+    const filteredDB = urlsForUser(uid);
+
     let templateVars = {
       usersDB: users,
-      urls: urlDB,
+      urls: filteredDB,
       userid: req.cookies['user_id']
     };
+
     res.render('urls_index', templateVars);
 
     // if not logged in
@@ -246,15 +268,27 @@ app.get('/urls', (req, res) => {
 // if user is not logged in:
 //    returns a 401 response, HTML with a relevant error message and a link to /login
 app.post('/urls', (req, res) => {
+  const uid = req.cookies['user_id'];
+
+  let rand = generateRandomString();
+
+  urlDB[rand] = {
+    longURL: req.body.longURL,
+    userID: req.cookies['user_id'],
+    shortURL: rand
+  };
+
+  // filter only user
+  const filteredDB = urlsForUser(uid);
   let templateVars = {
     usersDB: users,
-    urls: urlDB,
-    userid: req.cookies['user_id']
+    urls: filteredDB,
+    userid: uid
   };
-  let rand = generateRandomString();
-  urlDB[rand] = req.body.longURL;
+  console.log('filetered', filteredDB);
   res.render('urls_index', templateVars);
 });
+
 
 // Conver URL
 // if user is not logged in:
@@ -268,7 +302,7 @@ app.post('/urls', (req, res) => {
 //    text input field for the original URL
 //    submit button -> POST /urls
 app.get('/urls/new', (req, res) => {
-  if(req.cookies['user_id']) {
+  if (req.cookies['user_id']) {
     res.status(200);
     res.render('urls_new', {
       usersDB: users,
@@ -318,10 +352,15 @@ app.get('/u/:shortUrl', (req, res) => {
 
 // delete URL
 app.post('/urls/:shortUrl/delete', (req, res) => {
+  let uid = req.cookies['user_id'];
+  
   delete urlDB[req.params.shortUrl];
+
+  const filteredDB = urlsForUser(uid);
+
   let templateVars = {
     usersDB: users,
-    urls: urlDB,
+    urls: filteredDB,
     userid: req.cookies['user_id']
   };
   res.render('urls_index', templateVars);

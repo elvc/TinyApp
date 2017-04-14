@@ -8,8 +8,7 @@
 </head>
 
 <body style="padding:20px;">
-  <% include ./partials/_header %> 
-
+  <% include ./partials/_header %>
     <table class="pure-table pure-table-bordered">
       <thead>
         <tr>
@@ -21,30 +20,28 @@
       </thead>
       <tbody>
         <% for (let url in urls) { %>
-          <tr>
-            <td>
-              <%= urls[url].longURL %>
-            </td>
-            <td>
-              <a href='/u/<%= url %>'>
-                http://t.iny.io/u/<%= url %>
-              </a>
-            </td>
-            <td>
-              <form class="pure-form" method="GET" action="/urls/<%= url %>">
-                <input class="pure-button" type="submit" value="Edit">
-              </form>
-            </td>
-            <td>
-              <form class="pure-form" method="POST" action="/urls/<%= url %>/delete">
-                <input class="pure-button" type="submit" value="Delete">
-              </form>
-            </td>
-          </tr>
-          <% } %>
+            <tr>
+              <td><%= urls[url].longURL %></td>
+              <td>
+                <a href='/u/<%= urls[url].shortURL %>'>http://t.iny.io/u/<%= urls[url].shortURL %></a>
+              </td>
+              <td>
+                <form class="pure-form" method="GET" action="/urls/<%= url %>">
+                  <input class="pure-button" type="submit" value="Edit">
+                </form>
+              </td>
+              <td>
+                <form class="pure-form" method="POST" action="/urls/<%= url %>/delete">
+                  <input class="pure-button" type="submit" value="Delete">
+                </form>
+              </td>
+            </tr>
+        <% } %>
       </tbody>
     </table>
-      <div style="margin: 20px 0;"><a href="/urls/new"><button class="pure-button pure-button-primary">Click here</button></a> if you want to shorten a URL</div>
+
+    <div style="margin: 20px 0;"><a href="/urls/new"><button class="pure-button pure-button-primary">Click here</button></a> if you want to shorten a
+      URL</div>
 </body>
 
 </html>
