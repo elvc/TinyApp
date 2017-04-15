@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 const cookieSession = require('cookie-session');
 const bcrypt = require('bcrypt');
 
+app.locals.email = '';
+
 app.use(bodyParser.urlencoded({
   extended: true
 }));
@@ -150,13 +152,14 @@ app.post('/register', (req, res) => {
 
     // all is well => Create a new user record
     const useremail = req.body.email;
+    app.locals.email = req.body.email;
     const userpw = bcrypt.hashSync(req.body.password, 10);
 
     req.session.user_id = generateRandomString();
 
     users[req.session.user_id] = {
       id: req.session.user_id,
-      email: req.body.email,
+      email: useremail,
       password: userpw
     }
     res.cookie('user_id', req.session.user_id);
@@ -181,7 +184,8 @@ app.get('/login', (req, res) => {
   } else {
     res.status(200);
     res.render('urls_login', {
-      userid: req.session.user_id
+      userid: req.session.user_id,
+      email: app.locals.email 
     });
   }
 });
@@ -198,6 +202,7 @@ app.get('/login', (req, res) => {
 app.post('/login', (req, res) => {
 
   const emailInput = req.body.email;
+  app.locals.email = req.body.email;
   const password = req.body.password;
 
   for (let id in users) {
@@ -224,6 +229,7 @@ app.post('/login', (req, res) => {
 
 app.post('/logout', (req, res) => {
   req.session = null;
+  app.locals.email = '';
   res.clearCookie('user_id');
   res.redirect('/');
 });
@@ -268,6 +274,7 @@ app.get('/urls', (req, res) => {
       usersDB: users,
       urls: filteredDB,
       userid: req.session.user_id,
+      email: app.locals.email
     };
     res.status(200);
     res.render('urls_index', templateVars);
@@ -309,7 +316,7 @@ app.post('/urls', (req, res) => {
       usersDB: users,
       urls: filteredDB,
       userid: req.session.user_id,
-      email: users[req.session.user_id].email 
+      email: app.locals.email 
     };
     res.redirect('/urls/' + rand);
 
@@ -342,7 +349,8 @@ app.get('/urls/new', (req, res) => {
     res.status(200);
     res.render('urls_new', {
       usersDB: users,
-      userid: req.session.user_id
+      userid: req.session.user_id,
+      email: app.locals.email
     });
   } else {
     let templateVars = {
@@ -390,7 +398,7 @@ app.get('/urls/:id', (req, res) => {
       urls: filteredDB,
       shorturl: req.params.id,
       userid: req.session.user_id,
-      email: users[req.session.user_id].email 
+      email: app.locals.email 
     };
     res.render('urls_show', templateVars);
   } else {
@@ -436,7 +444,8 @@ app.post('/urls/:shortUrl/delete', (req, res) => {
   let templateVars = {
     usersDB: users,
     urls: filteredDB,
-    userid: req.session.user_id
+    userid: req.session.user_id,
+    email: app.locals.email 
   };
   res.render('urls_index', templateVars);
 });
@@ -450,7 +459,8 @@ app.post('/urls/:shortUrl/update', (req, res) => {
   let templateVars = {
     usersDB: users,
     urls: filteredDB,
-    userid: req.session.user_id
+    userid: req.session.user_id,
+    email: app.locals.email 
   };
   res.render('urls_index', templateVars);
 });
