@@ -6,8 +6,8 @@
  - Note that my focus is on Node and Express, not CSS layout at this point. 
 
 ## Technology Stack Used
-- Javascript ES6
-- `Node`
+- `ECMAScript 6`
+- `Node.js`
 - `Express.js` 
 - `git` for version control
 - `cookie-session` for session storage
