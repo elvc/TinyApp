@@ -263,12 +263,10 @@ app.get('/urls', (req, res) => {
   if (req.session.user_id) {
     // filter only user
     const filteredDB = urlsForUser(req.session.user_id);
-
     let templateVars = {
       usersDB: users,
       urls: filteredDB,
       userid: req.session.user_id,
-      email: users[req.session.user_id].email 
     };
     res.status(200);
     res.render('urls_index', templateVars);
@@ -376,12 +374,22 @@ app.get('/urls/new', (req, res) => {
 //      "delete" button -> POST /urls/:id/delete
 
 app.get('/urls/:id', (req, res) => {
+  
+  const filteredDB = urlsForUser(req.session.user_id);
+    
   if (urlDB[req.params.id]) {
+    // let templateVars = {
+    //   usersDB: users,
+    //   shorturl: req.params.id,
+    //   urls: urlDB,
+    //   userid: req.session.user_id
+    // };
     let templateVars = {
       usersDB: users,
+      urls: filteredDB,
       shorturl: req.params.id,
-      urls: urlDB,
-      userid: req.session.user_id
+      userid: req.session.user_id,
+      email: users[req.session.user_id].email 
     };
     res.render('urls_show', templateVars);
   } else {
