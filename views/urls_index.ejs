@@ -19,6 +19,8 @@
           <th>Delete URL</th>
         </tr>
       </thead>
+      <% } else { %>
+      <h4>You do not have any URLs. Please click below to start creating some.</h4>
       <% } %>
       <tbody>
         <% for (let url in urls) { %>

@@ -276,7 +276,6 @@ app.get('/urls', (req, res) => {
       userid: req.session.user_id,
       email: app.locals.email
     };
-    console.log(filteredDB);
     res.status(200);
     res.render('urls_index', templateVars);
 
