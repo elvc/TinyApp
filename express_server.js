@@ -224,6 +224,7 @@ app.post('/login', (req, res) => {
 
 app.post('/logout', (req, res) => {
   req.session = null;
+  res.clearCookie('user_id');
   res.redirect('/');
 });
 
@@ -444,11 +445,11 @@ app.post('/urls/:shortUrl/delete', (req, res) => {
 app.post('/urls/:shortUrl/update', (req, res) => {
   let sUrl = req.params.shortUrl;
   urlDB[sUrl].longURL = req.body.longURL;
-
+  const filteredDB = urlsForUser(req.session.user_id);
   // redirect to index page after update
   let templateVars = {
     usersDB: users,
-    urls: urlDB,
+    urls: filteredDB,
     userid: req.session.user_id
   };
   res.render('urls_index', templateVars);
