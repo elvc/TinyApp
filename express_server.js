@@ -247,7 +247,7 @@ app.get('/urls.json', (req, res) => {
 });
 
 // ===========================================================
-// DONE
+
 // list URLs
 // if user is not logged in:
 //    returns a 401 response, HTML with a relevant error message and a link to /login
@@ -276,6 +276,7 @@ app.get('/urls', (req, res) => {
       userid: req.session.user_id,
       email: app.locals.email
     };
+    console.log(filteredDB);
     res.status(200);
     res.render('urls_index', templateVars);
 

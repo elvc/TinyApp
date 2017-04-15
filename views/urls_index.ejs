@@ -10,6 +10,7 @@
 <body style="padding:20px;">
   <% include ./partials/_header %>
     <table class="pure-table pure-table-bordered">
+      <% if (Object.keys(urls).length !== 0) { %>
       <thead>
         <tr>
           <th>Short URL</th>
@@ -18,6 +19,7 @@
           <th>Delete URL</th>
         </tr>
       </thead>
+      <% } %>
       <tbody>
         <% for (let url in urls) { %>
           <tr>
