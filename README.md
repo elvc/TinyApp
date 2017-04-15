@@ -6,12 +6,12 @@
  - Note that my focus is on Node and Express, not CSS layout at this point. 
 
 ## Technology Stack Used
-- ES6
-- Node
-- express
-- git for version control
-- cookie-session for session storage
-- bcrypt for password encryption
+- Javascript ES6
+- `Node`
+- `Express.js` 
+- `git` for version control
+- `cookie-session` for session storage
+- `bcrypt` for password encryption
 
 ## How to Use 
 - To launch this App, run node in terminal/bash/command line
