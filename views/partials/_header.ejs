@@ -1,22 +1,21 @@
 <header>
   <h1>TinyApp</h1>
+  <div style="margin-bottom: 20px;">
+      <form method="GET" action="/" style="display: inline-block;">
+      <input class="pure-button pure-button-primary" type="submit" value="Home">
+      </form>
+    <% if (!userId) { %>
+      <form method="GET" action="/register" style="display: inline-block;">
+        <input class="pure-button pure-button-primary" type="submit" value="Register">
+      </form>
+      <form method="GET" action="/login" style="display: inline-block;">
+        <input class="pure-button pure-button-primary" type="submit" value="Log In">
+      </form>
+      <% } else { %>
+      <form method="POST" action="/logout" style="display: inline-block;">
+        <input class="pure-button pure-button-primary" type="submit" value="Log Out">
+      </form>
+      <h3>Logged in as: &nbsp;<span style="font-weight: normal;"> <%= email %></span></h3>
+    <% } %>
+  </div>
 </header>
-
-<div style="margin-bottom: 20px;">
-    <form method="GET" action="/" style="display: inline-block;">
-    <input class="pure-button pure-button-primary" type="submit" value="Home">
-    </form>
-  <% if (!userid) { %>
-    <form method="GET" action="/register" style="display: inline-block;">
-      <input class="pure-button pure-button-primary" type="submit" value="Register">
-    </form>
-    <form method="GET" action="/login" style="display: inline-block;">
-      <input class="pure-button pure-button-primary" type="submit" value="Log In">
-    </form>
-    <% } else { %>
-    <form method="POST" action="/logout" style="display: inline-block;">
-      <input class="pure-button pure-button-primary" type="submit" value="Log Out">
-    </form>
-    <h3>Logged in as: <%= email %></h3>
-  <% } %>
-</div>

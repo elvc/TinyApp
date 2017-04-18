@@ -5,7 +5,7 @@
   </head>
   <body style="padding:20px;">
     <% include partials/_header %> 
-    <% if (userid) { %>
+    <% if (userId) { %>
     <form class="pure-form" action="/urls" method="POST">
       <label for="longURL">Original URL to convert:</label>
       <input id="longURL" type="url" name="longURL" placeholder="http://" style="width: 300px">

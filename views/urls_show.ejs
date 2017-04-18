@@ -22,24 +22,24 @@
       <tbody>
         <tr>
           <td>
-            <a href='/u/<%= shorturl %>'>
-              http://t.iny.io/u/<%= shorturl %>
+            <a href='/u/<%= shortUrl %>'>
+              http://t.iny.io/u/<%= shortUrl %>
             </a>
           </td>
           <td>
-            <%= urls[shorturl].longURL %>
+            <%= urls[shortUrl].longURL %>
           </td>
           <td>
-            <form class="pure-form" method="POST" action="/urls/<%= shorturl %>/delete">
+            <form class="pure-form" method="POST" action="/urls/<%= shortUrl %>/delete">
               <input class="pure-button" type="submit" value="Delete">
             </form>
           </td>
         </tr>
       </tbody>
     </table>
-    <form class="pure-form" action="/urls/<%= shorturl %>/update" method="POST" style="margin-top: 20px;">
+    <form class="pure-form" action="/urls/<%= shortUrl %>/" method="POST" style="margin-top: 20px;">
       <label for="longURL">Edit full URL:</label>
-      <input id="longURL" type="text" name="longURL" placeholder="<%= urls[shorturl].longURL %>" style="width: 300px">
+      <input id="longURL" type="url" name="longURL" placeholder="<%= urls[shortUrl].longURL %>" style="width: 300px">
       <input class="pure-button pure-button-primary" type="submit" value="Update">
     </form>
 </body>
