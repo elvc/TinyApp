@@ -16,7 +16,7 @@
 ## How to Use 
 - To launch this App, run node in terminal/bash/command line
 ```cl 
-node express_server.js
+npm start
 ```
 - Browse to `http://localhost:3000/`
 
